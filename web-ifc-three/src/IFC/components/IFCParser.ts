@@ -18,7 +18,7 @@ import {
     BufferAttribute,
     Mesh
 } from 'three';
-import { mergeBufferGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
+import { mergeGeometries } from 'three/examples/jsm/utils/BufferGeometryUtils';
 import { BvhManager } from './BvhManager';
 import { IFCModel } from './IFCModel';
 
@@ -128,12 +128,12 @@ export class IFCParser implements ParserAPI {
 
         Object.keys(this.geometriesByMaterials).forEach((key) => {
             const geometriesByMaterial = this.geometriesByMaterials[key].geometries;
-            const merged = mergeBufferGeometries(geometriesByMaterial);
+            const merged = mergeGeometries(geometriesByMaterial);
             materials.push(this.geometriesByMaterials[key].material);
             geometries.push(merged);
         });
 
-        const combinedGeometry = mergeBufferGeometries(geometries, true);
+        const combinedGeometry = mergeGeometries(geometries, true);
         this.cleanUpGeometryMemory(geometries);
         if (this.BVH) this.BVH.applyThreeMeshBVH(combinedGeometry);
         const model = new IFCModel(combinedGeometry, materials);
